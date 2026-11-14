@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pymongo import MongoClient
@@ -9,7 +10,8 @@ app.url_map.strict_slashes = False
 CORS(app)
 
 try:
-    cliente = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=2000)
+    MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+    cliente = MongoClient(MONGO_URI, serverSelectionTimeoutMS=2000)
     cliente.admin.command('ping')
     db = cliente["monitoreo_industrial"]
     sensores_col = db["sensores"]
