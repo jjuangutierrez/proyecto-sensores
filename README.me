@@ -1,0 +1,55 @@
+# EA2: API REST de Monitoreo Industrial con MongoDB
+
+API desarrollada en Python con Flask para la gestión y almacenamiento de datos de sensores en una base de datos NoSQL (MongoDB local).
+
+## 1. Requisitos previos
+
+- Python 3.10 o superior instalado.
+- MongoDB Community Server instalado y ejecutándose en el puerto local por defecto (`localhost:27017`).
+
+## 2. Instalación y ejecución
+
+1. Abrir la terminal en la carpeta del proyecto.
+2. Crear y activar el entorno virtual:
+   - En Windows (PowerShell):
+     python -m venv .venv
+     .\.venv\Scripts\Activate.ps1
+
+3. Instalar las dependencias del proyecto:
+   pip install -r requirements.txt
+
+4. Iniciar la API:
+   python API.py
+
+El servidor quedará disponible en: `http://127.0.0.1:5000`
+
+## 3. Endpoints disponibles
+
+La API gestiona la colección `sensores` dentro de la base de datos `monitoreo_industrial`.
+
+- POST /sensores/
+  Registra un nuevo sensor. Requiere un JSON con: tipo, valor, ubicacion y fecha.
+
+- GET /sensores/
+  Retorna la lista de todos los sensores almacenados.
+
+- GET /sensores/<tipo>
+  Retorna únicamente los sensores que coincidan con el tipo especificado (ejemplo: /sensores/temperatura).
+
+- PUT /sensores/<tipo>
+  Actualiza los datos del sensor correspondiente al tipo indicado.
+
+- DELETE /sensores/<tipo>
+  Elimina el sensor correspondiente al tipo indicado.
+
+## 4. Reglas de validación
+
+- tipo: Obligatorio. Solo admite: "temperatura", "presion" o "vibracion".
+- valor: Obligatorio y numérico. Rangos permitidos:
+  - Temperatura: de -10 a 100 (°C).
+  - Presión: de 0 a 500 (kPa).
+  - Vibración: de 0 a 5 (mm/s).
+- ubicacion: Obligatorio (cadena de texto no vacía).
+- fecha: Obligatorio en formato estándar ISO (YYYY-MM-DD o YYYY-MM-DD HH:MM:SS).
+
+Si los datos enviados no cumplen estas condiciones, la API responde con código 400 Bad Request y el mensaje descriptivo del error.
